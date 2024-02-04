@@ -30,16 +30,14 @@ app.use("/api", require("./routes/userRouter"));
 app.use("/api", require("./routes/notifyRouter"));
 app.use("/api", require("./routes/messageRouter"));
 
-const URI = process.env.MONGODB_URL
+const URI = process.env.MONGODB_URL;
 mongoose.set("strictQuery", true);
-mongoose.connect(URI, { useNewUrlParser: true });
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection
   .once("open", () => console.log("Connected"))
   .on("error", (error) => {
     console.log(`Error : ${error}`);
   });
-
-
 
 const port = process.env.PORT || 5000;
 http.listen(port, () => {
