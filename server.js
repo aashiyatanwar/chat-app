@@ -12,6 +12,10 @@ app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
 
+app.get("/", (req, res) => {
+  return res.json("Hi there");
+});
+
 // Socket
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
