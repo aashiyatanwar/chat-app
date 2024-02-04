@@ -30,27 +30,16 @@ app.use("/api", require("./routes/userRouter"));
 app.use("/api", require("./routes/notifyRouter"));
 app.use("/api", require("./routes/messageRouter"));
 
-const URI = process.env.MONGODB_URL;
-mongoose.connect(
-  URI,
-  {
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  (err) => {
-    if (err) throw err;
-    console.log("Connected to mongodb");
-  }
-);
-
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+const URI = process.env.MONGODB_URL
+mongoose.set("strictQuery", true);
+mongoose.connect(URI, { useNewUrlParser: true });
+mongoose.connection
+  .once("open", () => console.log("Connected"))
+  .on("error", (error) => {
+    console.log(`Error : ${error}`);
   });
-}
+
+
 
 const port = process.env.PORT || 5000;
 http.listen(port, () => {
